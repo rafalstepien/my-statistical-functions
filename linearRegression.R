@@ -66,6 +66,6 @@ linear_model = function(data, dependent_variable, ...) {
   cat("\nResidual standard error:", round(sqrt(S2e), 4),  "on", nrows-ncols-1,  "degrees of freedom\nMultiple R-squared::", round(R2, 4), "\nF-statistic:", F_stat, "on", ncols, "and", nrows-ncols-1, "DF, F-statistics p-value:", F_stat_p.val)
 }
 
-linear_model(data, dependent_variable=Sepal.Length, Sepal.Width, Petal.Length, Petal.Width)
-model <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width)
+linear_model(data, dependent_variable=data$Sepal.Length, data$Sepal.Width, data$Petal.Length, data$Petal.Width)
+model <- lm(data$Sepal.Length ~ data$Sepal.Width + data$Petal.Length + data$Petal.Width)
 summary(model)
