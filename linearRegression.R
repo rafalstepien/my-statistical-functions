@@ -1,5 +1,3 @@
-data = iris[1:4]
-
 get_stars <- function(p.val.vector){
   stars_vector <- c()
   for (i in 1:length(p.val.vector)){
@@ -22,7 +20,7 @@ unpack_names <- function(names_list){
   new_names_vect <- c()
   new_names_vect[1] <- "(Intercept)"
   for (i in 1:length(names_list)){
-    new_names_vect[i+1] <- as.character(names_list[[i]])
+    new_names_vect[i+1] <- as.character(names_list[[i]][3])
   }
   new_names_vect
 }
@@ -69,3 +67,4 @@ linear_model = function(data, dependent_variable, ...) {
 linear_model(data, dependent_variable=data$Sepal.Length, data$Sepal.Width, data$Petal.Length, data$Petal.Width)
 model <- lm(data$Sepal.Length ~ data$Sepal.Width + data$Petal.Length + data$Petal.Width)
 summary(model)
+

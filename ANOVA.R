@@ -1,6 +1,3 @@
-data = iris
-data$season = rbinom(150,1,prob=0.5)
-
 get_stars <- function(p.val.vector){
   stars_vector <- c()
   for (i in 1:length(p.val.vector)){
@@ -19,14 +16,13 @@ get_stars <- function(p.val.vector){
   stars_vector
 }
 
+
+
 # ONE WAY ANOVA
 one_way_anova <- function(data, dependent_var, independent_var){
   
-  # SETTING UP ARGUMENTS
-  args <- as.list(match.call())
-  
   # CREATE HELPER DATAFRAME
-  helper_dataframe <- cbind(data[as.character(args$dependent_var)], c(data[as.character(args$independent_var)]))
+  helper_dataframe <- cbind(data[dependent_var], c(data[independent_var]))
   helper_dataframe[, 2] <- as.factor(helper_dataframe[, 2])
   
   n <- length(helper_dataframe[, 2])
@@ -64,7 +60,7 @@ one_way_anova <- function(data, dependent_var, independent_var){
   # MEAN SQUARE BETWEEN
   MSw <- SSw/(n-k)
 
-  names <- c(as.character(args$independent_var), "Residuals")
+  names <- c(independent_var, "Residuals")
   degrees_of_freedom <- c(k-1, n-k)
   sosq <- c(SSb, SSw)
   stars <- get_stars(c(p_wartosc))
@@ -73,7 +69,7 @@ one_way_anova <- function(data, dependent_var, independent_var){
   P_vect <- c(p_wartosc, "")
   
   # PRINT
-  cat("Analysis of Variance Table\n\nResponse: ", args$dependent_var, "\n")
+  cat("Analysis of Variance Table\n\nResponse: ", dependent_var, "\n")
   df <- data.frame(X=names,
                    Df=degrees_of_freedom,
                    Sum_of_squares=sosq,
@@ -136,12 +132,11 @@ post_hoc <- function(q, MSw, srG, k, n){
 # TWO WAY ANOVA
 two_way_anova <- function(data, dependent_var, independent_var_1, independent_var_2){
   # SETTING UP ARGUMENTS
-  args <- as.list(match.call())
   
   # CREATE HELPER DATAFRAME
-  helper_dataframe <- cbind(data[as.character(args$dependent_var)], 
-                            c(data[as.character(args$independent_var_1)]), 
-                            c(data[as.character(args$independent_var_2)])
+  helper_dataframe <- cbind(data[dependent_var], 
+                            c(data[independent_var_1]), 
+                            c(data[independent_var_2])
                             )
   
   helper_dataframe[, 2] <- as.factor(helper_dataframe[, 2])
@@ -186,7 +181,7 @@ two_way_anova <- function(data, dependent_var, independent_var_1, independent_va
   pB = pf(Fb, 146, 1, lower.tail = FALSE)
   
   
-  names <- c(as.character(args$independent_var_1), as.character(args$independent_var_2), "Residuals")
+  names <- c(independent_var_1, independent_var_2, "Residuals")
   degrees_of_freedom <- c(length(unique(helper_dataframe[, 2]))-1, length(unique(helper_dataframe[, 3]))-1 , length(helper_dataframe[, 2]) - length(unique(helper_dataframe[, 2])))
   sosq <- c(SSa, SSb, SSe)
   stars <- get_stars(c(pA, pB))
@@ -195,7 +190,7 @@ two_way_anova <- function(data, dependent_var, independent_var_1, independent_va
   P_vect <- c(pA, pB, "")
   
   # PRINT
-  cat("Analysis of Variance Table\n\nResponse: ", args$dependent_var, "\n")
+  cat("Analysis of Variance Table\n\nResponse: ", dependent_var, "\n")
   df <- data.frame(X=names,
                    Df=degrees_of_freedom,
                    Sum_of_squares=sosq,
